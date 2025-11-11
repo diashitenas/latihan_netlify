@@ -208,6 +208,43 @@
 
     /* Smooth scroll behavior */
     html{scroll-behavior:smooth}
+
+    /* SLIDESHOW STYLES */
+    .slideshow-container{position:relative;width:100%;max-width:100%;background:#000;overflow:hidden;border-bottom:1px solid var(--border)}
+    .slides-wrapper{position:relative;width:100%;padding-bottom:56.25%;background:linear-gradient(135deg,#ecfdf5,#d1fae5)}
+    .slides-wrapper iframe,.slide-item{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+    .slide-item{opacity:0;transition:opacity .8s ease-in-out;display:flex;align-items:center;justify-content:center;padding:40px 20px;text-align:center;animation:none}
+    .slide-item.active{opacity:1;animation:fadeInSlide .8s ease-in-out}
+    .slide-item.prev{opacity:0}
+
+    .slide-content{max-width:600px;animation:slideUp .6s ease-out}
+
+    .slide-item h2{font-size:32px;color:var(--brand);margin:0 0 16px;font-weight:800;animation:slideDown .6s ease-out .1s both}
+    .slide-item p{font-size:16px;color:#374151;margin:0 0 24px;line-height:1.6;animation:slideUp .6s ease-out .2s both}
+    .slide-item .btn{animation:slideUp .6s ease-out .3s both;animation-fill-mode:both;margin:0 8px}
+
+    .slide-dot-container{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:20}
+    .dot{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;transition:all .3s;border:2px solid transparent}
+    .dot.active{background:var(--brand);transform:scale(1.2);border-color:var(--brand)}
+    .dot:hover{background:var(--brand-2);transform:scale(1.15)}
+
+    .slide-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.8);border:none;width:48px;height:48px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:24px;transition:all .3s;z-index:15;color:#111827}
+    .slide-btn:hover{background:var(--brand);color:#fff;transform:translateY(-50%) scale(1.1)}
+    .slide-btn.prev{left:20px}
+    .slide-btn.next{right:20px}
+
+    @keyframes fadeInSlide{
+      from{opacity:0}
+      to{opacity:1}
+    }
+
+    @media(max-width:768px){
+      .slide-item h2{font-size:24px}
+      .slide-item p{font-size:14px}
+      .slide-btn{width:40px;height:40px;font-size:20px}
+      .slide-btn.prev{left:10px}
+      .slide-btn.next{right:10px}
+    }
   </style>
 </head>
 <body>
@@ -241,6 +278,62 @@
   </header>
 
   <main>
+    <!-- SLIDESHOW -->
+    <div class="slideshow-container">
+      <div class="slides-wrapper">
+        <div class="slide-item active">
+          <div class="slide-content">
+            <h2>♻️ Ubah Sampah Jadi Uang</h2>
+            <p>Jual material daur ulang Anda dengan harga terbaik dan proses yang mudah. Jadwalkan penjemputan gratis untuk area tertentu.</p>
+            <div>
+              <a class="btn primary" href="#produk">Jual Sekarang</a>
+              <a class="btn" href="#harga">Lihat Harga</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-item">
+          <div class="slide-content">
+            <h2>🛒 Beli Material Siap Kirim</h2>
+            <p>Butuh bahan baku untuk pabrik atau komunitas? Temukan berbagai material berkualitas tinggi dengan harga kompetitif.</p>
+            <div>
+              <a class="btn primary" href="#produk">Belanja Material</a>
+              <a class="btn" href="#kategori">Lihat Kategori</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-item">
+          <div class="slide-content">
+            <h2>🌱 Dukung Ekonomi Sirkular</h2>
+            <p>Setiap pembelian dan penjualan Anda berkontribusi pada lingkungan yang lebih bersih. Mari bersama-sama ciptakan perubahan positif.</p>
+            <div>
+              <a class="btn primary" href="#edukasi">Pelajari Lebih Lanjut</a>
+              <a class="btn" href="#pickup">Jadwalkan Pickup</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-item">
+          <div class="slide-content">
+            <h2>🚚 Penjemputan Terjadwal</h2>
+            <p>Minimal 5 kg, pembayaran instant, tracking digital, dan bukti timbang. Semua untuk kenyamanan Anda.</p>
+            <div>
+              <a class="btn primary" href="#pickup">Buat Jadwal Sekarang</a>
+              <a class="btn" href="#kategori">Syarat & Ketentuan</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Dots -->
+      <div class="slide-dot-container" id="dots"></div>
+
+      <!-- Navigation Arrows -->
+      <button class="slide-btn prev" id="prevBtn">❮</button>
+      <button class="slide-btn next" id="nextBtn">❯</button>
+    </div>
+
     <!-- HERO -->
     <section class="hero">
       <div class="container hero-grid">
@@ -456,6 +549,70 @@
   </footer>
 
   <script>
+    // Slideshow functionality
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide-item');
+    const totalSlides = slides.length;
+    let autoSlideTimer;
+
+    function showSlide(n){
+      if(n >= totalSlides){currentSlide = 0}
+      if(n < 0){currentSlide = totalSlides - 1}
+      
+      slides.forEach(slide => slide.classList.remove('active'));
+      slides[currentSlide].classList.add('active');
+      
+      // Update dots
+      const dots = document.querySelectorAll('.dot');
+      dots.forEach(dot => dot.classList.remove('active'));
+      if(dots[currentSlide]){dots[currentSlide].classList.add('active')}
+      
+      resetAutoSlide();
+    }
+
+    function nextSlide(){
+      currentSlide++;
+      showSlide(currentSlide);
+    }
+
+    function prevSlide(){
+      currentSlide--;
+      showSlide(currentSlide);
+    }
+
+    function goToSlide(n){
+      currentSlide = n;
+      showSlide(currentSlide);
+    }
+
+    function autoSlide(){
+      autoSlideTimer = setTimeout(() => {
+        nextSlide();
+        autoSlide();
+      }, 5000);
+    }
+
+    function resetAutoSlide(){
+      clearTimeout(autoSlideTimer);
+      autoSlide();
+    }
+
+    // Create dots
+    const dotsContainer = document.getElementById('dots');
+    for(let i = 0; i < totalSlides; i++){
+      const dot = document.createElement('button');
+      dot.className = 'dot' + (i === 0 ? ' active' : '');
+      dot.onclick = () => goToSlide(i);
+      dotsContainer.appendChild(dot);
+    }
+
+    // Event listeners
+    document.getElementById('nextBtn').addEventListener('click', nextSlide);
+    document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+    // Start auto-slide
+    autoSlide();
+
     // Mobile menu toggle
     const hb = document.getElementById('hamburger');
     const dr = document.getElementById('drawer');
