@@ -67,9 +67,147 @@
     @media(min-width:768px){.fgrid{grid-template-columns:2fr 1fr 1fr 1fr}}
 
     /* mobile drawer */
-    .drawer{display:none;border-top:1px solid var(--border);padding:12px 0}
-    .drawer a{display:block;padding:10px 0;color:#374151}
+    .drawer{display:none;border-top:1px solid var(--border);padding:12px 0;animation:slideDown .3s ease-out}
+    .drawer a{display:block;padding:10px 0;color:#374151;transition:color .2s}
+    .drawer a:hover{color:var(--brand)}
     @media(min-width:768px){.drawer{display:none!important}}
+
+    /* ANIMATIONS */
+    @keyframes fadeIn{
+      from{opacity:0;transform:translateY(10px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    @keyframes slideDown{
+      from{opacity:0;transform:translateY(-10px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    @keyframes slideUp{
+      from{opacity:0;transform:translateY(20px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    @keyframes slideLeft{
+      from{opacity:0;transform:translateX(-30px)}
+      to{opacity:1;transform:translateX(0)}
+    }
+
+    @keyframes slideRight{
+      from{opacity:0;transform:translateX(30px)}
+      to{opacity:1;transform:translateX(0)}
+    }
+
+    @keyframes pulse{
+      0%,100%{opacity:1}
+      50%{opacity:.7}
+    }
+
+    @keyframes scaleIn{
+      from{opacity:0;transform:scale(.95)}
+      to{opacity:1;transform:scale(1)}
+    }
+
+    @keyframes bounce{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-8px)}
+    }
+
+    @keyframes shimmer{
+      0%{background-position:200% center}
+      100%{background-position:-200% center}
+    }
+
+    /* Apply animations to sections */
+    section{animation:fadeIn .6s ease-out both}
+    section:nth-child(1){animation-delay:0s}
+    section:nth-child(2){animation-delay:.1s}
+    section:nth-child(3){animation-delay:.2s}
+    section:nth-child(4){animation-delay:.3s}
+    section:nth-child(5){animation-delay:.4s}
+    section:nth-child(6){animation-delay:.5s}
+
+    /* Hero animation */
+    .hero-grid > div:first-child{animation:slideLeft .7s ease-out}
+    .hero-grid > div:last-child{animation:slideRight .7s ease-out}
+
+    h1{animation:slideLeft .8s ease-out;animation-delay:.2s;animation-fill-mode:both}
+    .lead{animation:slideLeft .8s ease-out;animation-delay:.3s;animation-fill-mode:both}
+    .hero-grid > div:first-child > div{animation:slideLeft .8s ease-out;animation-delay:.4s;animation-fill-mode:both}
+
+    /* Mock/Hero Image */
+    .mock-inner{animation:scaleIn .8s ease-out;animation-delay:.5s;animation-fill-mode:both}
+    .mock-inner:hover{transform:scale(1.05);box-shadow:0 15px 35px rgba(5,150,105,.2)}
+
+    /* Card animations */
+    .card{animation:slideUp .5s ease-out both;transition:all .3s cubic-bezier(.4,0,.2,1)}
+    .grid.cols-3 .card:nth-child(1){animation-delay:.1s}
+    .grid.cols-3 .card:nth-child(2){animation-delay:.15s}
+    .grid.cols-3 .card:nth-child(3){animation-delay:.2s}
+    .grid.cols-3 .card:nth-child(4){animation-delay:.25s}
+    .grid.cols-3 .card:nth-child(5){animation-delay:.3s}
+    .grid.cols-3 .card:nth-child(6){animation-delay:.35s}
+
+    .grid.cols-4 .card:nth-child(1){animation-delay:.1s}
+    .grid.cols-4 .card:nth-child(2){animation-delay:.15s}
+    .grid.cols-4 .card:nth-child(3){animation-delay:.2s}
+    .grid.cols-4 .card:nth-child(4){animation-delay:.25s}
+
+    .grid.cols-2 .card:nth-child(1){animation-delay:.1s}
+    .grid.cols-2 .card:nth-child(2){animation-delay:.2s}
+
+    .card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,0,0,.12)}
+
+    /* Button animations */
+    .btn{transition:all .3s ease;position:relative;overflow:hidden}
+    .btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:rgba(255,255,255,.2);transition:left .3s ease}
+    .btn:hover::before{left:100%}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.1)}
+    .btn.primary:hover{box-shadow:0 6px 20px rgba(5,150,105,.3)}
+
+    /* Badge animation */
+    .badge{animation:scaleIn .6s ease-out .1s both}
+    .badge:hover{animation:pulse .8s ease-in-out infinite}
+
+    /* Section titles animation */
+    h2{animation:slideLeft .7s ease-out;animation-fill-mode:both}
+    section h2{animation-delay:.15s}
+
+    /* Link hover effects */
+    a{transition:color .2s ease}
+    header a:hover{color:var(--brand)}
+    footer a{color:#6b7280;transition:color .2s ease}
+    footer a:hover{color:var(--brand);transform:translateX(2px);display:inline-block}
+
+    /* Chip animation */
+    .chip{display:inline-flex;align-items:center;animation:slideUp .5s ease-out both;animation-delay:inherit}
+    .chip:hover{background:#a7f3d0;transform:scale(1.05)}
+
+    /* Price animation */
+    .price{animation:slideUp .6s ease-out;animation-fill-mode:both}
+    .card .price{animation-delay:.2s}
+
+    /* Input-like focus effects for better interactivity */
+    .btn:focus{outline:2px solid var(--brand);outline-offset:2px}
+
+    /* Mobile menu animation */
+    .drawer a{animation:slideDown .3s ease-out forwards}
+    .drawer a:nth-child(1){animation-delay:.05s}
+    .drawer a:nth-child(2){animation-delay:.1s}
+    .drawer a:nth-child(3){animation-delay:.15s}
+    .drawer a:nth-child(4){animation-delay:.2s}
+    .drawer a:nth-child(5){animation-delay:.25s}
+    .drawer a:nth-child(6){animation-delay:.3s}
+    .drawer a:nth-child(7){animation-delay:.35s}
+
+    /* Header stick animation */
+    header{animation:slideDown .4s ease-out}
+
+    /* Footer animation */
+    footer{animation:fadeIn 1s ease-out}
+
+    /* Smooth scroll behavior */
+    html{scroll-behavior:smooth}
   </style>
 </head>
 <body>
